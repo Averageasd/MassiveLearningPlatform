@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace be.Models
@@ -10,7 +11,7 @@ namespace be.Models
 
         [Required]
         [StringLength(20, ErrorMessage = "Username length must be beween 5 and 20 characters", MinimumLength = 5)]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Required]
         [Range(0, 120, ErrorMessage = "Age must be between 0 and 120")]
@@ -18,9 +19,9 @@ namespace be.Models
 
         [Required]
         [StringLength(30, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 30 characters")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
-        [DefaultValue(DateTime.Now)]    
-        public DateTime DateJoin { get; set; }
+        [BindNever]   
+        public DateTime DateJoin { get; set; } = DateTime.Now;
     }
 }
