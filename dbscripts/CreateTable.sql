@@ -15,3 +15,15 @@ BEGIN
 END
 
 
+IF OBJECT_ID(N'Profile',N'U') IS NULL
+BEGIN
+	CREATE TABLE [Profile] (
+		ID INT PRIMARY KEY,
+		FOREIGN KEY (ID) REFERENCES [dbo].[User](ID) ON DELETE CASCADE,
+		QuizCount INT,
+		PostCount INT,
+		CardCount INT,
+		CollectionCount INT
+	);
+END
+

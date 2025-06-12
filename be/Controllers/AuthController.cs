@@ -1,4 +1,5 @@
 ﻿using be.DTOs;
+using be.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be.Controllers
@@ -7,31 +8,51 @@ namespace be.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginDTO loginDTO)
+
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        [HttpGet("login")]
+        public async Task<IActionResult> Login([FromQuery] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (!loginDTO.UserName!.Equals("admin") && !loginDTO.Password!.Equals("admin123"))
+            try
             {
-                return Unauthorized();
-            }   
-            return Ok();
+                var user = await _authService.LoginUser(loginDTO);
+                return Ok(user);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         [HttpPost("signup")]
-        public IActionResult Register([FromBody] SignUpDTO signUpDTO)
+        public async Task<IActionResult> Register([FromBody] SignUpDTO signUpDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+            try
+            {
+                await _authService.RegisterUser(signUpDTO);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
 
-            return Ok();
 
+            }
         }
     }
 }

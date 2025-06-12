@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 
-namespace be.Models
+namespace be.DTOs
 {
-    public class User
+    public class AuthenticatedUserDTO
     {
         [Key]
         public int Id { get; set; }
@@ -16,11 +16,7 @@ namespace be.Models
         [Range(0, 120, ErrorMessage = "Age must be between 0 and 120")]
         public int Age { get; set; }
 
-        [Required]
-        [StringLength(30, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 30 characters")]
-        public string? Password { get; set; }
-
-        [BindNever]   
+        [BindNever]
         public DateTime DateJoin { get; set; } = DateTime.Now;
     }
 }
