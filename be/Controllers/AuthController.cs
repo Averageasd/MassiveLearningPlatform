@@ -7,5 +7,10 @@ namespace be.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        [HttpPost("login")]
+        public IActionResult Login()
+        {
+            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 }

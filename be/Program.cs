@@ -1,6 +1,10 @@
+using be.DBContext;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSingleton<DapperContext>();
 
 builder.Services.AddControllers();
 
