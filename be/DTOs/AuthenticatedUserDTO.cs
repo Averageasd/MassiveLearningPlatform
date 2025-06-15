@@ -18,5 +18,7 @@ namespace be.DTOs
 
         [BindNever]
         public DateTime DateJoin { get; set; } = DateTime.Now;
+
+        public string? Token { get; set; } = "";
     }
 }

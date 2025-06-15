@@ -2,7 +2,9 @@ using be.DBContext;
 using be.Services.ImplServices;
 using be.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<DapperContext>();
 
 builder.Services.AddScoped<IAuthService, ImplAuthService>();
+builder.Services.AddScoped<IJwtService, ImplJwtService>();
 
 // we use JWT Bearer tokens to authenticate users and 
 // challenge unauthenticated requests by sending 401 requests
@@ -20,7 +23,7 @@ builder.Services.AddAuthentication(opt =>
 })
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             // validate person who issued the token
             ValidateIssuer = true,
@@ -35,18 +38,20 @@ builder.Services.AddAuthentication(opt =>
             ValidateIssuerSigningKey = true,
 
             // the token issuer
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
 
             // intended audience of token
             // to make things simple, we have issuer and audience to be the same issuer and audience
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidAudience = builder.Configuration["JWT:Audience"],
+
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1da281bf-e261-48f5-890f-765024394fd3"))
         };
     });
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         // token is expected to be found in HTTP header
         In = ParameterLocation.Header,

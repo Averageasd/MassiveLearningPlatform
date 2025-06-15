@@ -49,9 +49,7 @@ namespace be.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500);
-
-
+                throw;
             }
         }
     }

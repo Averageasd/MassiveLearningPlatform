@@ -1,6 +1,6 @@
 ﻿namespace be.Models
 {
-    public class PostQuizzCollection
+    public class PostQuizCollection
     {
     }
 }

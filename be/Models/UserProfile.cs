@@ -9,8 +9,7 @@ namespace be.Models
         public int Id { get; set; }
 
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
-
+        public int UserId { get; set; }  
         public int QuizCount { get; set; } = 0;
         public int PostCount { get; set; } = 0;
         public int CardCount { get; set; } = 0;

@@ -11,9 +11,11 @@ namespace be.Services.ImplServices
     {
 
         private DapperContext _context;
-        public ImplAuthService(DapperContext dapperContext)
+        private IJwtService _jwtService;
+        public ImplAuthService(DapperContext dapperContext, IJwtService jwtService)
         {
             _context = dapperContext;
+            _jwtService = jwtService;
         }
         public async Task<AuthenticatedUserDTO> LoginUser(LoginDTO loginDTO)
         {
@@ -31,6 +33,8 @@ namespace be.Services.ImplServices
                     {
                         throw new UnauthorizedAccessException();
                     }
+                    var token = _jwtService.GenerateToken(authenticatedUserDTO.Id);
+                    authenticatedUserDTO.Token = token;
                     return authenticatedUserDTO;
                 }
             }
@@ -52,7 +56,6 @@ namespace be.Services.ImplServices
                     await connection.ExecuteAsync(query, new
                     {
                         UserName = signUpDTO.UserName,
-                        Age = signUpDTO.Age,
                         UserPassword = signUpDTO.Password
                     });
                 }
